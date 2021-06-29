@@ -47,6 +47,11 @@ func New(ads string) *EndlessTcp {
 	return e
 }
 
+// SetReadLength 设置每次读取的长度
+func (e *EndlessTcp) SetReadLength(readLength int) {
+	e.readLength = readLength
+}
+
 // EndlessTcpListen监听入口
 func (e *EndlessTcp) EndlessTcpRegisterAndListen(u UpgradeRead) error {
 	flag.Parse()
