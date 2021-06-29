@@ -30,6 +30,7 @@ type EndlessTcp struct {
 	wg         *sync.WaitGroup
 	readLength int
 	conflags   conflag
+	// 注意 conflags 这个升级过后的内容，两个进程是不共用的，比如原进程连接有五个，升级过后的有10个连接，输出长度分别是5和10.而不是都是15
 }
 
 // default adress is ":8080"
