@@ -172,5 +172,5 @@ func (e *EndlessTcp) reload() error {
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.ExtraFiles = append(cmd.ExtraFiles, f)
-	return cmd.Start()
+	return cmd.Run()
 }
