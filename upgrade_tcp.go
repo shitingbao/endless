@@ -34,15 +34,15 @@ type EndlessTcp struct {
 }
 
 // default adress is ":8080"
-func New(ads string) *EndlessTcp {
+func New(ads ...string) *EndlessTcp {
 	e := &EndlessTcp{
 		address:    defaultAddress,
 		wg:         &sync.WaitGroup{},
 		readLength: 256,
 		conflags:   make(map[string]net.Conn),
 	}
-	if ads != "" {
-		e.address = ads
+	if len(ads) > 0 {
+		e.address = ads[0]
 	}
 	return e
 }
@@ -119,18 +119,18 @@ func (e *EndlessTcp) read(con net.Conn, u UpgradeRead) {
 	}
 }
 
-func (e *EndlessTcp) Write(v interface{}) error {
+func (e *EndlessTcp) Write(v interface{}) (int, error) {
 	for _, con := range e.GetCons() {
 		b, err := json.Marshal(v)
 		if err != nil {
-			return err
+			return -1, err
 		}
-		_, err = con.Write(b)
+		n, err := con.Write(b)
 		if err != nil {
-			return err
+			return n, err
 		}
 	}
-	return nil
+	return 0, nil
 }
 
 func (e *EndlessTcp) GetCons() conflag {
