@@ -1,4 +1,4 @@
-package endless_tcp
+package tcp
 
 type ReadMes struct {
 	N   int

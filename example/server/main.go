@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	tcp "github.com/shitingbao/endless_tcp"
+	"github.com/shitingbao/tcp"
 )
 
 type tcpModel struct {

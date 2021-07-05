@@ -2,7 +2,7 @@
 //总思路，开启新进程，继承老进程的tcp服务
 //老进程等待所有连接关闭后退出
 //新的进程监听新的连接，老进程由于被继承不会继续监听，相当于把端口让出给新进程
-package endless_tcp
+package tcp
 
 import (
 	"encoding/json"
