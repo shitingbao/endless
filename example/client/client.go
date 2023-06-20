@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -29,9 +28,9 @@ func main() {
 			result := make([]byte, 256)
 			_, err = conn.Read(result)
 			checkError(err)
-			mes := ""
-			json.Unmarshal(result, &mes)
-			log.Println("read:", mes)
+			// mes := ""
+			// json.Unmarshal(result, &mes)
+			log.Println("read:", string(result))
 		}
 	}()
 	ch := make(chan os.Signal, 1)

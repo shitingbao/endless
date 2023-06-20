@@ -21,7 +21,7 @@ func main() {
 	t := &tcpModel{}
 	go func() { // 这里 Write 只是做一个例子，实际的使用需要自己定义逻辑，或者使用 GetCons 获取所有连接后筛选写入
 		for {
-			if _, err := e.Write("aaaaaa"); err != nil {
+			if _, err := e.Write("bbb"); err != nil {
 				return
 			}
 			time.Sleep(time.Second * 2)

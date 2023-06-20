@@ -1,7 +1,7 @@
-//这里对于长连接
-//总思路，开启新进程，继承老进程的tcp服务
-//老进程等待所有连接关闭后退出
-//新的进程监听新的连接，老进程由于被继承不会继续监听，相当于把端口让出给新进程
+// 这里对于长连接
+// 总思路，开启新进程，继承老进程的tcp服务
+// 老进程等待所有连接关闭后退出
+// 新的进程监听新的连接，老进程由于被继承不会继续监听，相当于把端口让出给新进程
 package endless
 
 import (
@@ -27,7 +27,7 @@ type conflag map[string]net.Conn
 type EndlessTcp struct {
 	address    string
 	listen     net.Listener
-	wg         *sync.WaitGroup
+	wg         *sync.WaitGroup // 该标识标记了父进程的退出逻辑，在进程 listen 的时候 add，并且在信号接收的地方 wait ，在连接全部断开的时候 done，这样连接全部断开的时候，就自动退出了父进程
 	readLength int
 	conflags   conflag
 	// 注意 conflags 这个升级过后的内容，两个进程是不共用的，比如原进程连接有五个，升级过后的有10个连接，输出长度分别是5和10.而不是都是15
@@ -152,7 +152,10 @@ func (e *EndlessTcp) signalHandler() {
 			if err := e.reload(); err != nil {
 				log.Fatalf("restart error: %v", err)
 			}
+			// go e.reload()
+			log.Println("start wait")
 			e.wg.Wait()
+			log.Println("stop wait")
 			return
 		}
 	}
@@ -172,5 +175,5 @@ func (e *EndlessTcp) reload() error {
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.ExtraFiles = append(cmd.ExtraFiles, f)
-	return cmd.Run()
+	return cmd.Start() // 注意这里要用 Start，不能 Run，不然就在新进程中卡住，因为执行可执行程序 Run 中会 wait 等待
 }
