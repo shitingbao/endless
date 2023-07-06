@@ -165,6 +165,10 @@ func (e *EndlessTcp) signalHandler() {
 // 以及最重要的listen对象（放入ExtraFiles中），以文件句柄的形式继承
 // 相当于有了所有父进程的属性，然后重新执行该可执行文件
 func (e *EndlessTcp) reload() error {
+	defer e.listen.Close()
+	// 待定 可能需要 close 父进程的 listen 不然父进程和子进程一起接受连接，如果父进程一直有接受连接就无法直接退出
+	// 但是 close 时，子进程如果还没开始监听，就会丢失连接
+	// 已经连接不会受影响
 	f, err := e.listen.(*net.TCPListener).File()
 	if err != nil {
 		log.Println("reload", err)
